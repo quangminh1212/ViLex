@@ -1,8 +1,8 @@
 {
   "$schema": "../node_modules/@tauri-apps/cli/config.schema.json",
-  "productName": "VietDoc Pro",
+  "productName": "ViLex",
   "version": "1.0.0",
-  "identifier": "com.vilex.vietdoc-pro",
+  "identifier": "com.vilex.app",
   "build": {
     "frontendDist": "../dist",
     "beforeDevCommand": "npm run dev",
@@ -12,7 +12,7 @@
   "app": {
     "windows": [
       {
-        "title": "VietDoc Pro - Tạo Văn Bản Pháp Lý Việt Nam",
+        "title": "ViLex - Tạo Văn Bản Pháp Lý Việt Nam",
         "width": 1280,
         "height": 840,
         "minWidth": 800,

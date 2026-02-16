@@ -12,7 +12,7 @@ let selectedClauses: string[] = [];
 
 // ===== Theme =====
 const initTheme = () => {
-  const saved = localStorage.getItem('vietdoc-theme') || 'light';
+  const saved = localStorage.getItem('vilex-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
   updateThemeIcon(saved);
 };
@@ -388,7 +388,7 @@ const initApp = () => {
     const cur = document.documentElement.getAttribute('data-theme');
     const next = cur === 'dark' ? 'light' : 'dark';
     document.documentElement.setAttribute('data-theme', next);
-    localStorage.setItem('vietdoc-theme', next);
+    localStorage.setItem('vilex-theme', next);
     updateThemeIcon(next);
   });
 

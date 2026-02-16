@@ -1,4 +1,4 @@
-# 📜 VietDoc Pro
+# ⚖️ ViLex
 
 **Công cụ tạo văn bản pháp lý Việt Nam chuyên nghiệp — Tạo hợp đồng, hóa đơn, báo giá chỉ với vài click.**
 
@@ -42,7 +42,7 @@
 ```bash
 # Clone repo
 git clone <repo-url>
-cd vietdoc-pro
+cd vilex
 
 # Cài đặt dependencies
 npm install
@@ -76,7 +76,7 @@ npm run preview
 ## 📂 Cấu trúc dự án
 
 ```
-vietdoc-pro/
+vilex/
 ├── index.html          # Entry point HTML
 ├── src/
 │   ├── main.ts         # Logic chính: form, navigation, PDF export
@@ -108,4 +108,4 @@ Các mẫu văn bản được xây dựng dựa trên:
 
 ## 📄 License
 
-MIT © 2026 VietDoc Pro
+MIT © 2026 ViLex

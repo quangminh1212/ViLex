@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 >nul 2>&1
-title VietDoc Pro
+title ViLex
 color 0A
 
 echo ========================================
-echo   VietDoc Pro - Launcher
+echo   ViLex - Launcher
 echo ========================================
 echo.
 
