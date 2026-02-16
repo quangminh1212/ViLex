@@ -75,11 +75,13 @@ const renderCards = (filter = '') => {
   noResults.style.display = 'none';
 
   grid.innerHTML = filtered.map((t, i) => `
-    <div class="doc-card" data-id="${t.id}" style="animation-delay: ${Math.min(i * 0.06, 0.5)}s">
+    <div class="doc-card" data-id="${t.id}" style="animation-delay: ${Math.min(i * 0.04, 0.4)}s">
       ${t.badge ? `<span class="doc-card-badge">${t.badge}</span>` : ''}
       <span class="doc-card-icon">${t.icon}</span>
-      <div class="doc-card-title">${t.title}</div>
-      <div class="doc-card-desc">${t.desc}</div>
+      <div class="doc-card-body">
+        <div class="doc-card-title">${t.title}</div>
+        <div class="doc-card-desc">${t.desc}</div>
+      </div>
     </div>
   `).join('');
 
