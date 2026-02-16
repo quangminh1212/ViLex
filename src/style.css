@@ -491,20 +491,20 @@ body {
   }
 }
 
-/* ===== Hero Section - Clean Google style ===== */
+/* ===== Hero Section - Compact ===== */
 .hero-section {
   text-align: center;
-  margin-bottom: 24px;
-  padding: 8px 0 16px;
+  margin-bottom: 20px;
+  padding: 4px 0 12px;
 }
 
 .hero-title {
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 400;
   color: var(--text-primary);
   letter-spacing: -0.01em;
   line-height: 1.3;
-  margin-bottom: 6px;
+  margin-bottom: 4px;
 }
 
 .hero-highlight {
@@ -513,10 +513,10 @@ body {
 }
 
 .hero-desc {
-  font-size: 14px;
+  font-size: 13px;
   color: var(--text-secondary);
-  max-width: 480px;
-  margin: 0 auto 16px;
+  max-width: 440px;
+  margin: 0 auto 10px;
   line-height: 1.5;
 }
 
@@ -531,12 +531,12 @@ body {
 .stat-chip {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: 5px;
+  padding: 5px 12px;
   background: var(--bg-card);
   border: 1px solid var(--border-light);
   border-radius: var(--radius-full);
-  font-size: 13px;
+  font-size: 12px;
   color: var(--text-secondary);
   font-weight: 500;
   transition: all var(--transition-base);
@@ -549,7 +549,7 @@ body {
 }
 
 .stat-chip .stat-icon {
-  font-size: 16px;
+  font-size: 15px;
   color: var(--accent);
 }
 
@@ -628,38 +628,36 @@ body {
   transform: translateX(-3px);
 }
 
-/* ===== Document Grid - Google Drive Cards ===== */
+/* ===== Document Grid - Vertical Cards with Color Headers ===== */
 .doc-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 16px;
 }
 
 .doc-card {
   background: var(--bg-card);
   border: 1px solid var(--border-light);
-  border-radius: var(--radius-md);
-  padding: 16px;
+  border-radius: var(--radius-lg);
   cursor: pointer;
   transition: all var(--transition-base);
   position: relative;
   overflow: hidden;
   opacity: 0;
-  transform: translateY(8px);
-  animation: cardAppear 0.3s ease forwards;
+  transform: translateY(12px);
+  animation: cardAppear 0.35s ease forwards;
   display: flex;
-  align-items: center;
-  gap: 14px;
+  flex-direction: column;
 }
 
 .doc-card:hover {
-  background: var(--bg-card-hover);
   box-shadow: var(--shadow-card-hover);
   border-color: transparent;
+  transform: translateY(-4px);
 }
 
 .doc-card:active {
-  transform: scale(0.99);
+  transform: translateY(-2px) scale(0.99);
 }
 
 @keyframes cardAppear {
@@ -669,73 +667,100 @@ body {
   }
 }
 
-.doc-card-icon {
-  font-size: 24px;
+/* Colored visual header area */
+.doc-card-visual {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-md);
-  background: var(--accent-bg);
-  flex-shrink: 0;
+  padding: 24px 16px;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  transition: all var(--transition-base);
+}
+
+.doc-card:hover .doc-card-visual {
+  padding: 28px 16px;
+}
+
+.doc-card-icon {
+  font-size: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-lg);
   transition: all var(--transition-base);
 }
 
 .doc-card:hover .doc-card-icon {
-  background: var(--accent-bg-strong);
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 .doc-card-body {
   flex: 1;
-  min-width: 0;
+  padding: 14px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .doc-card-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  margin-bottom: 2px;
   color: var(--text-primary);
   transition: color var(--transition-base);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.doc-card:hover .doc-card-title {
-  color: var(--accent);
 }
 
 .doc-card-desc {
   font-size: 12px;
   color: var(--text-muted);
-  line-height: 1.4;
+  line-height: 1.5;
   display: -webkit-box;
-  -webkit-line-clamp: 1;
-  line-clamp: 1;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
+/* Action link */
+.doc-card-action {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 6px;
+  opacity: 0;
+  transform: translateX(-4px);
+  transition: all var(--transition-base);
+}
+
+.doc-card-action .material-symbols-outlined {
+  font-size: 16px;
+  transition: transform var(--transition-fast);
+}
+
+.doc-card:hover .doc-card-action {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.doc-card:hover .doc-card-action .material-symbols-outlined {
+  transform: translateX(3px);
+}
+
 .doc-card-badge {
   position: absolute;
-  top: 12px;
-  right: 12px;
+  top: 10px;
+  right: 10px;
   font-size: 10px;
-  padding: 2px 8px;
+  padding: 3px 10px;
   border-radius: var(--radius-full);
-  background: var(--accent-bg);
-  color: var(--accent);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.03em;
   transition: all var(--transition-base);
-}
-
-.doc-card:hover .doc-card-badge {
-  background: var(--accent);
-  color: white;
+  z-index: 1;
 }
 
 /* ===== Form - Facebook/Google Clean Style ===== */
