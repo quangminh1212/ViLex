@@ -1,7 +1,8 @@
 {
-  "name": "0",
+  "name": "vietdoc-pro",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Công cụ tạo văn bản pháp lý Việt Nam chuyên nghiệp",
   "type": "module",
   "scripts": {
     "dev": "vite",
