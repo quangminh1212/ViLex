@@ -77,13 +77,33 @@ const renderCards = (filter = '') => {
 
   noResults.style.display = 'none';
 
+  // Color map per document type for variety
+  const colorMap: Record<string, string> = {
+    quotation: '#ea4335',    // red
+    invoice: '#4285f4',      // blue
+    rental: '#34a853',       // green
+    service: '#fbbc04',      // yellow
+    sales: '#8e24aa',        // purple
+    labor: '#00897b',        // teal
+    poa: '#f4511e',          // deep orange
+    liquidation: '#546e7a',  // blue grey
+    handover: '#ff6d00',     // orange
+    receipt: '#1e88e5',      // light blue
+  };
+
   grid.innerHTML = filtered.map((t, i) => `
-    <div class="doc-card" data-id="${t.id}" style="animation-delay: ${Math.min(i * 0.04, 0.4)}s">
-      ${t.badge ? `<span class="doc-card-badge">${t.badge}</span>` : ''}
-      <span class="doc-card-icon">${t.icon}</span>
+    <div class="doc-card" data-id="${t.id}" data-color="${colorMap[t.id] || '#4285f4'}" style="animation-delay: ${Math.min(i * 0.05, 0.5)}s">
+      ${t.badge ? `<span class="doc-card-badge" style="background:${colorMap[t.id]}20;color:${colorMap[t.id]}">${t.badge}</span>` : ''}
+      <div class="doc-card-visual" style="background:${colorMap[t.id]}10">
+        <span class="doc-card-icon" style="background:${colorMap[t.id]}18">${t.icon}</span>
+      </div>
       <div class="doc-card-body">
         <div class="doc-card-title">${t.title}</div>
         <div class="doc-card-desc">${t.desc}</div>
+        <div class="doc-card-action" style="color:${colorMap[t.id]}">
+          <span class="material-symbols-outlined">arrow_forward</span>
+          <span>Tạo văn bản</span>
+        </div>
       </div>
     </div>
   `).join('');
