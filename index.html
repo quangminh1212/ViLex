@@ -14,26 +14,41 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap"
     rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap"
+    rel="stylesheet">
   <link rel="icon" type="image/png" href="/logo.png" />
   <link rel="stylesheet" href="/src/style.css" />
 </head>
 
 <body>
   <div id="app">
-    <!-- Header -->
+    <!-- Header - Google Drive style -->
     <header class="header">
       <div class="header-content">
-        <div class="logo">
-          <img src="/logo.png" alt="ViLex" class="logo-icon" />
-          <div class="logo-text">
-            <h1>ViLex</h1>
-            <span class="logo-tagline">Văn Bản Pháp Lý Thông Minh</span>
+        <div class="header-left">
+          <div class="logo">
+            <img src="/logo.png" alt="ViLex" class="logo-icon" />
+            <span class="logo-text">ViLex</span>
           </div>
         </div>
-        <div class="header-actions">
+        <div class="header-center" id="headerSearch">
+          <div class="search-wrapper">
+            <span class="material-symbols-outlined search-icon-mat">search</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm mẫu văn bản..."
+              autocomplete="off" />
+            <button class="search-clear" id="searchClear" style="display:none;">
+              <span class="material-symbols-outlined">close</span>
+            </button>
+          </div>
+        </div>
+        <div class="header-right">
           <button class="btn-icon" id="themeToggle" title="Đổi giao diện">
-            <span class="theme-icon">🌙</span>
+            <span class="material-symbols-outlined theme-icon">dark_mode</span>
           </button>
+          <div class="user-avatar" title="ViLex User">
+            <span class="material-symbols-outlined">person</span>
+          </div>
         </div>
       </div>
     </header>
@@ -44,7 +59,7 @@
         <div class="stepper-step active" data-step="1">
           <div class="stepper-circle">
             <span class="stepper-num">1</span>
-            <span class="stepper-check">✓</span>
+            <span class="material-symbols-outlined stepper-check">check</span>
           </div>
           <span class="stepper-label">Chọn Mẫu</span>
         </div>
@@ -52,7 +67,7 @@
         <div class="stepper-step" data-step="2">
           <div class="stepper-circle">
             <span class="stepper-num">2</span>
-            <span class="stepper-check">✓</span>
+            <span class="material-symbols-outlined stepper-check">check</span>
           </div>
           <span class="stepper-label">Nhập Thông Tin</span>
         </div>
@@ -60,7 +75,7 @@
         <div class="stepper-step" data-step="3">
           <div class="stepper-circle">
             <span class="stepper-num">3</span>
-            <span class="stepper-check">✓</span>
+            <span class="material-symbols-outlined stepper-check">check</span>
           </div>
           <span class="stepper-label">Xem & Xuất</span>
         </div>
@@ -74,24 +89,26 @@
         <div class="hero-section">
           <h2 class="hero-title">Tạo văn bản pháp lý <span class="hero-highlight">chuyên nghiệp</span></h2>
           <p class="hero-desc">Chọn mẫu văn bản phù hợp — điền thông tin — xuất PDF chỉ trong vài phút</p>
-          <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm mẫu văn bản..."
-              autocomplete="off" />
-          </div>
           <div class="hero-stats">
-            <span class="stat-item">📄 <strong id="templateCount">10</strong> mẫu văn bản</span>
-            <span class="stat-divider">•</span>
-            <span class="stat-item">⚖️ Theo chuẩn pháp luật VN</span>
-            <span class="stat-divider">•</span>
-            <span class="stat-item">🔒 Không lưu dữ liệu</span>
+            <div class="stat-chip">
+              <span class="material-symbols-outlined stat-icon">description</span>
+              <span><strong id="templateCount">10</strong> mẫu</span>
+            </div>
+            <div class="stat-chip">
+              <span class="material-symbols-outlined stat-icon">gavel</span>
+              <span>Chuẩn pháp luật VN</span>
+            </div>
+            <div class="stat-chip">
+              <span class="material-symbols-outlined stat-icon">lock</span>
+              <span>Không lưu dữ liệu</span>
+            </div>
           </div>
         </div>
         <div class="doc-grid" id="docGrid">
           <!-- Cards will be rendered by JS -->
         </div>
         <div class="no-results" id="noResults" style="display:none;">
-          <span class="no-results-icon">🔍</span>
+          <span class="material-symbols-outlined no-results-icon">search_off</span>
           <p>Không tìm thấy mẫu văn bản phù hợp</p>
         </div>
       </section>
@@ -100,11 +117,10 @@
       <section id="step2" class="step">
         <div class="step-header">
           <button class="btn-back" id="backToStep1">
-            <span class="btn-back-icon">←</span>
+            <span class="material-symbols-outlined">arrow_back</span>
             <span>Quay lại</span>
           </button>
-          <div class="step-badge">2</div>
-          <div>
+          <div class="step-title-group">
             <h2 id="step2Title">Nhập Thông Tin</h2>
             <p class="step-desc" id="step2Desc">Điền đầy đủ thông tin cho văn bản</p>
           </div>
@@ -115,7 +131,10 @@
           </form>
           <!-- Clause Checklist -->
           <div class="clause-section" id="clauseSection" style="display:none;">
-            <h3 class="clause-title">📋 Điều Khoản Bổ Sung</h3>
+            <h3 class="clause-title">
+              <span class="material-symbols-outlined">checklist</span>
+              Điều Khoản Bổ Sung
+            </h3>
             <p class="clause-desc">Chọn các điều khoản cần thêm vào văn bản</p>
             <div class="clause-list" id="clauseList">
               <!-- Dynamic clauses rendered by JS -->
@@ -123,11 +142,11 @@
           </div>
           <div class="form-actions">
             <button type="button" class="btn btn-secondary" id="previewBtn">
-              <span>👁️</span>
+              <span class="material-symbols-outlined">visibility</span>
               <span>Xem Trước</span>
             </button>
             <button type="button" class="btn btn-primary" id="exportPdfBtn">
-              <span>📄</span>
+              <span class="material-symbols-outlined">picture_as_pdf</span>
               <span>Xuất PDF</span>
             </button>
           </div>
@@ -138,22 +157,21 @@
       <section id="step3" class="step">
         <div class="step-header">
           <button class="btn-back" id="backToStep2">
-            <span class="btn-back-icon">←</span>
+            <span class="material-symbols-outlined">arrow_back</span>
             <span>Quay lại</span>
           </button>
-          <div class="step-badge">3</div>
-          <div>
+          <div class="step-title-group">
             <h2>Xem Trước Văn Bản</h2>
             <p class="step-desc">Kiểm tra nội dung trước khi xuất PDF</p>
           </div>
         </div>
         <div class="preview-toolbar">
           <button type="button" class="btn btn-primary" id="exportPdfBtn2">
-            <span>📄</span>
+            <span class="material-symbols-outlined">picture_as_pdf</span>
             <span>Xuất PDF</span>
           </button>
           <button type="button" class="btn btn-secondary" id="editBtn">
-            <span>✏️</span>
+            <span class="material-symbols-outlined">edit</span>
             <span>Chỉnh Sửa</span>
           </button>
         </div>
@@ -172,7 +190,7 @@
 
     <!-- Toast notification -->
     <div id="toast" class="toast">
-      <span class="toast-icon"></span>
+      <span class="material-symbols-outlined toast-icon-mat"></span>
       <span class="toast-msg"></span>
     </div>
   </div>
