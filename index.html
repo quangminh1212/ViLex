@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="VietDoc Pro - Công cụ tạo văn bản pháp lý Việt Nam chuyên nghiệp. Tạo báo giá, hóa đơn, hợp đồng và các văn bản pháp lý chỉ với 1 click." />
+  <meta name="keywords" content="văn bản pháp lý, hợp đồng, báo giá, hóa đơn, mẫu hợp đồng Việt Nam, tạo hợp đồng online" />
+  <title>VietDoc Pro - Tạo Văn Bản Pháp Lý Việt Nam</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📜</text></svg>" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">📜</span>
+          <div class="logo-text">
+            <h1>VietDoc Pro</h1>
+            <span class="logo-tagline">Văn Bản Pháp Lý Thông Minh</span>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button class="btn-icon" id="themeToggle" title="Đổi giao diện">
+            <span class="theme-icon">🌙</span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main">
+      <!-- Step 1: Choose Document Type -->
+      <section id="step1" class="step active">
+        <div class="step-header">
+          <div class="step-badge">1</div>
+          <div>
+            <h2>Chọn Loại Văn Bản</h2>
+            <p class="step-desc">Chọn loại văn bản pháp lý bạn cần tạo</p>
+          </div>
+        </div>
+        <div class="doc-grid" id="docGrid">
+          <!-- Cards will be rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Step 2: Fill Information -->
+      <section id="step2" class="step">
+        <div class="step-header">
+          <button class="btn-back" id="backToStep1">← Quay lại</button>
+          <div class="step-badge">2</div>
+          <div>
+            <h2 id="step2Title">Nhập Thông Tin</h2>
+            <p class="step-desc" id="step2Desc">Điền đầy đủ thông tin cho văn bản</p>
+          </div>
+        </div>
+        <div class="form-container">
+          <form id="docForm" class="doc-form">
+            <!-- Dynamic form fields rendered by JS -->
+          </form>
+          <!-- Clause Checklist -->
+          <div class="clause-section" id="clauseSection" style="display:none;">
+            <h3 class="clause-title">📋 Điều Khoản Bổ Sung</h3>
+            <p class="clause-desc">Chọn các điều khoản cần thêm vào văn bản</p>
+            <div class="clause-list" id="clauseList">
+              <!-- Dynamic clauses rendered by JS -->
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="previewBtn">👁️ Xem Trước</button>
+            <button type="button" class="btn btn-primary" id="exportPdfBtn">📄 Xuất PDF</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Step 3: Preview -->
+      <section id="step3" class="step">
+        <div class="step-header">
+          <button class="btn-back" id="backToStep2">← Quay lại</button>
+          <div class="step-badge">3</div>
+          <div>
+            <h2>Xem Trước Văn Bản</h2>
+            <p class="step-desc">Kiểm tra nội dung trước khi xuất PDF</p>
+          </div>
+        </div>
+        <div class="preview-actions">
+          <button type="button" class="btn btn-primary" id="exportPdfBtn2">📄 Xuất PDF</button>
+          <button type="button" class="btn btn-secondary" id="editBtn">✏️ Chỉnh Sửa</button>
+        </div>
+        <div class="preview-container">
+          <div class="preview-paper" id="previewContent">
+            <!-- Preview rendered by JS -->
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <p>© 2026 VietDoc Pro — Công cụ tạo văn bản pháp lý theo chuẩn Việt Nam</p>
+    </footer>
+
+    <!-- Toast notification -->
+    <div id="toast" class="toast"></div>
+  </div>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
