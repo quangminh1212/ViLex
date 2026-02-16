@@ -19,7 +19,7 @@ const initTheme = () => {
 
 const updateThemeIcon = (t: string) => {
   const ic = document.querySelector('.theme-icon');
-  if (ic) ic.textContent = t === 'dark' ? '☀️' : '🌙';
+  if (ic) ic.textContent = t === 'dark' ? 'light_mode' : 'dark_mode';
 };
 
 // ===== Stepper =====
@@ -47,6 +47,9 @@ const showStep = (n: number) => {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById(`step${n}`)?.classList.add('active');
   updateStepper(n);
+  // Show search only on step 1
+  const headerSearch = document.getElementById('headerSearch');
+  if (headerSearch) headerSearch.style.visibility = n === 1 ? 'visible' : 'hidden';
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
@@ -362,16 +365,16 @@ const showToast = (msg: string, type: 'info' | 'success' | 'error' = 'info') => 
   const t = document.getElementById('toast');
   if (!t) return;
 
-  const icon = t.querySelector('.toast-icon') as HTMLElement;
+  const icon = t.querySelector('.toast-icon-mat') as HTMLElement;
   const msgEl = t.querySelector('.toast-msg') as HTMLElement;
 
   const icons: Record<string, string> = {
-    info: 'ℹ️',
-    success: '✅',
-    error: '❌'
+    info: 'info',
+    success: 'check_circle',
+    error: 'error'
   };
 
-  if (icon) icon.textContent = icons[type] || 'ℹ️';
+  if (icon) icon.textContent = icons[type] || 'info';
   if (msgEl) msgEl.textContent = msg;
 
   t.className = `toast show ${type}`;
@@ -410,13 +413,24 @@ const initApp = () => {
 
   // Search
   const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  const searchClear = document.getElementById('searchClear') as HTMLButtonElement;
   let searchTimeout: ReturnType<typeof setTimeout>;
   searchInput?.addEventListener('input', () => {
     clearTimeout(searchTimeout);
     searchTimeout = setTimeout(() => {
       renderCards(searchInput.value);
     }, 200);
+    if (searchClear) searchClear.style.display = searchInput.value ? 'flex' : 'none';
   });
+  searchClear?.addEventListener('click', () => {
+    if (searchInput) {
+      searchInput.value = '';
+      renderCards('');
+      searchInput.focus();
+    }
+    if (searchClear) searchClear.style.display = 'none';
+  });
+
 
   // Render cards & stepper
   renderCards();
