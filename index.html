@@ -32,26 +32,70 @@
       </div>
     </header>
 
+    <!-- Progress Stepper -->
+    <div class="stepper-bar">
+      <div class="stepper-content">
+        <div class="stepper-step active" data-step="1">
+          <div class="stepper-circle">
+            <span class="stepper-num">1</span>
+            <span class="stepper-check">✓</span>
+          </div>
+          <span class="stepper-label">Chọn Mẫu</span>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-step" data-step="2">
+          <div class="stepper-circle">
+            <span class="stepper-num">2</span>
+            <span class="stepper-check">✓</span>
+          </div>
+          <span class="stepper-label">Nhập Thông Tin</span>
+        </div>
+        <div class="stepper-line"></div>
+        <div class="stepper-step" data-step="3">
+          <div class="stepper-circle">
+            <span class="stepper-num">3</span>
+            <span class="stepper-check">✓</span>
+          </div>
+          <span class="stepper-label">Xem & Xuất</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Main Content -->
     <main class="main">
       <!-- Step 1: Choose Document Type -->
       <section id="step1" class="step active">
-        <div class="step-header">
-          <div class="step-badge">1</div>
-          <div>
-            <h2>Chọn Loại Văn Bản</h2>
-            <p class="step-desc">Chọn loại văn bản pháp lý bạn cần tạo</p>
+        <div class="hero-section">
+          <h2 class="hero-title">Tạo văn bản pháp lý <span class="hero-highlight">chuyên nghiệp</span></h2>
+          <p class="hero-desc">Chọn mẫu văn bản phù hợp — điền thông tin — xuất PDF chỉ trong vài phút</p>
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="searchInput" class="search-input" placeholder="Tìm kiếm mẫu văn bản..." autocomplete="off" />
+          </div>
+          <div class="hero-stats">
+            <span class="stat-item">📄 <strong id="templateCount">10</strong> mẫu văn bản</span>
+            <span class="stat-divider">•</span>
+            <span class="stat-item">⚖️ Theo chuẩn pháp luật VN</span>
+            <span class="stat-divider">•</span>
+            <span class="stat-item">🔒 Không lưu dữ liệu</span>
           </div>
         </div>
         <div class="doc-grid" id="docGrid">
           <!-- Cards will be rendered by JS -->
+        </div>
+        <div class="no-results" id="noResults" style="display:none;">
+          <span class="no-results-icon">🔍</span>
+          <p>Không tìm thấy mẫu văn bản phù hợp</p>
         </div>
       </section>
 
       <!-- Step 2: Fill Information -->
       <section id="step2" class="step">
         <div class="step-header">
-          <button class="btn-back" id="backToStep1">← Quay lại</button>
+          <button class="btn-back" id="backToStep1">
+            <span class="btn-back-icon">←</span>
+            <span>Quay lại</span>
+          </button>
           <div class="step-badge">2</div>
           <div>
             <h2 id="step2Title">Nhập Thông Tin</h2>
@@ -71,8 +115,14 @@
             </div>
           </div>
           <div class="form-actions">
-            <button type="button" class="btn btn-secondary" id="previewBtn">👁️ Xem Trước</button>
-            <button type="button" class="btn btn-primary" id="exportPdfBtn">📄 Xuất PDF</button>
+            <button type="button" class="btn btn-secondary" id="previewBtn">
+              <span>👁️</span>
+              <span>Xem Trước</span>
+            </button>
+            <button type="button" class="btn btn-primary" id="exportPdfBtn">
+              <span>📄</span>
+              <span>Xuất PDF</span>
+            </button>
           </div>
         </div>
       </section>
@@ -80,16 +130,25 @@
       <!-- Step 3: Preview -->
       <section id="step3" class="step">
         <div class="step-header">
-          <button class="btn-back" id="backToStep2">← Quay lại</button>
+          <button class="btn-back" id="backToStep2">
+            <span class="btn-back-icon">←</span>
+            <span>Quay lại</span>
+          </button>
           <div class="step-badge">3</div>
           <div>
             <h2>Xem Trước Văn Bản</h2>
             <p class="step-desc">Kiểm tra nội dung trước khi xuất PDF</p>
           </div>
         </div>
-        <div class="preview-actions">
-          <button type="button" class="btn btn-primary" id="exportPdfBtn2">📄 Xuất PDF</button>
-          <button type="button" class="btn btn-secondary" id="editBtn">✏️ Chỉnh Sửa</button>
+        <div class="preview-toolbar">
+          <button type="button" class="btn btn-primary" id="exportPdfBtn2">
+            <span>📄</span>
+            <span>Xuất PDF</span>
+          </button>
+          <button type="button" class="btn btn-secondary" id="editBtn">
+            <span>✏️</span>
+            <span>Chỉnh Sửa</span>
+          </button>
         </div>
         <div class="preview-container">
           <div class="preview-paper" id="previewContent">
@@ -105,7 +164,10 @@
     </footer>
 
     <!-- Toast notification -->
-    <div id="toast" class="toast"></div>
+    <div id="toast" class="toast">
+      <span class="toast-icon"></span>
+      <span class="toast-msg"></span>
+    </div>
   </div>
 
   <script type="module" src="/src/main.ts"></script>
