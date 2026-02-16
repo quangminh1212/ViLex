@@ -50,36 +50,11 @@ if not exist "node_modules" (
     echo.
 )
 
-:: Menu chon che do
+:: Khoi chay Web Dev Server
 echo ----------------------------------------
-echo   Chon che do khoi chay:
+echo [*] Khoi chay Web Dev Server...
+echo [*] Vite HMR tu dong cap nhat khi code thay doi
+echo [*] Nhan Ctrl+C de dung
 echo ----------------------------------------
-echo   1. Desktop App (Tauri - Khuyen dung)
-echo   2. Web Browser (Vite Dev Server)
-echo ----------------------------------------
-
-if "%HAS_RUST%"=="0" (
-    echo.
-    echo   [!] Rust chua cai - tu dong chay Web
-    set MODE=2
-    goto run
-)
-
-set /p MODE="  Nhap lua chon (1/2): "
-
-:run
 echo.
-
-if "%MODE%"=="1" (
-    echo [*] Khoi chay Desktop App...
-    echo [*] Vite HMR tu dong cap nhat khi code thay doi
-    echo [*] Dong cua so app hoac Ctrl+C de dung
-    echo.
-    call npm run tauri:dev
-) else (
-    echo [*] Khoi chay Web Dev Server...
-    echo [*] Vite HMR tu dong cap nhat khi code thay doi
-    echo [*] Nhan Ctrl+C de dung
-    echo.
-    call npm run dev
-)
+call npm run dev
