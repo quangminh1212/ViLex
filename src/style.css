@@ -155,8 +155,9 @@ body {
 }
 
 .logo-icon {
-  font-size: 1.5rem;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
 }
 
 .logo-text h1 {
