@@ -1,14 +1,16 @@
 import './style.css';
-import { templates, DocTemplate } from './templates';
+import { templates } from './templates';
+import type { DocTemplate } from './templates';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
 // State
 let currentTemplate: DocTemplate | null = null;
+
 let items: { name: string; unit: string; qty: number; price: number; note?: string }[] = [{ name: '', unit: 'cái', qty: 1, price: 0 }];
 let selectedClauses: string[] = [];
 
-// Theme
+// ===== Theme =====
 const initTheme = () => {
   const saved = localStorage.getItem('vietdoc-theme') || 'light';
   document.documentElement.setAttribute('data-theme', saved);
@@ -20,36 +22,70 @@ const updateThemeIcon = (t: string) => {
   if (ic) ic.textContent = t === 'dark' ? '☀️' : '🌙';
 };
 
-document.getElementById('themeToggle')?.addEventListener('click', () => {
-  const cur = document.documentElement.getAttribute('data-theme');
-  const next = cur === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', next);
-  localStorage.setItem('vietdoc-theme', next);
-  updateThemeIcon(next);
-});
+// ===== Stepper =====
+const updateStepper = (step: number) => {
 
-// Navigation
+  const steps = document.querySelectorAll('.stepper-step');
+  const lines = document.querySelectorAll('.stepper-line');
+
+  steps.forEach((el, i) => {
+    const s = i + 1;
+    el.classList.remove('active', 'completed');
+    if (s < step) el.classList.add('completed');
+    else if (s === step) el.classList.add('active');
+  });
+
+  lines.forEach((line, i) => {
+    line.classList.remove('filled', 'filling');
+    if (i < step - 1) line.classList.add('filled');
+    else if (i === step - 1) line.classList.add('filling');
+  });
+};
+
+// ===== Navigation =====
 const showStep = (n: number) => {
   document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
   document.getElementById(`step${n}`)?.classList.add('active');
+  updateStepper(n);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 };
 
-document.getElementById('backToStep1')?.addEventListener('click', () => showStep(1));
-document.getElementById('backToStep2')?.addEventListener('click', () => showStep(2));
-document.getElementById('editBtn')?.addEventListener('click', () => showStep(2));
+// ===== Render Document Cards =====
+const renderCards = (filter = '') => {
+  const grid = document.getElementById('docGrid');
+  const noResults = document.getElementById('noResults');
+  if (!grid || !noResults) return;
 
-// Render Document Cards
-const renderCards = () => {
-  const grid = document.getElementById('docGrid')!;
-  grid.innerHTML = templates.map(t => `
-    <div class="doc-card" data-id="${t.id}">
+  const filterLower = filter.toLowerCase().trim();
+
+  const filtered = filterLower
+    ? templates.filter(t =>
+      t.title.toLowerCase().includes(filterLower) ||
+      t.desc.toLowerCase().includes(filterLower) ||
+      (t.badge && t.badge.toLowerCase().includes(filterLower))
+    )
+    : templates;
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    noResults.style.display = 'block';
+    return;
+  }
+
+  noResults.style.display = 'none';
+
+  grid.innerHTML = filtered.map((t, i) => `
+    <div class="doc-card" data-id="${t.id}" style="animation-delay: ${Math.min(i * 0.06, 0.5)}s">
       ${t.badge ? `<span class="doc-card-badge">${t.badge}</span>` : ''}
       <span class="doc-card-icon">${t.icon}</span>
       <div class="doc-card-title">${t.title}</div>
       <div class="doc-card-desc">${t.desc}</div>
     </div>
   `).join('');
+
+  // Update template count
+  const countEl = document.getElementById('templateCount');
+  if (countEl) countEl.textContent = String(filtered.length);
 
   grid.querySelectorAll('.doc-card').forEach(card => {
     card.addEventListener('click', () => {
@@ -60,11 +96,12 @@ const renderCards = () => {
   });
 };
 
-// Build Form
+// ===== Build Form =====
 const openForm = (tmpl: DocTemplate) => {
-  const form = document.getElementById('docForm')!;
-  const title = document.getElementById('step2Title')!;
-  const desc = document.getElementById('step2Desc')!;
+  const form = document.getElementById('docForm');
+  const title = document.getElementById('step2Title');
+  const desc = document.getElementById('step2Desc');
+  if (!form || !title || !desc) return;
 
   title.textContent = `${tmpl.icon} ${tmpl.title}`;
   desc.textContent = tmpl.desc;
@@ -108,37 +145,39 @@ const openForm = (tmpl: DocTemplate) => {
   form.innerHTML = html;
 
   // Clauses
-  const clauseSec = document.getElementById('clauseSection')!;
-  const clauseList = document.getElementById('clauseList')!;
-  if (tmpl.clauses.length > 0) {
-    clauseSec.style.display = 'block';
-    selectedClauses = tmpl.clauses.filter(c => c.checked).map(c => c.id);
-    clauseList.innerHTML = tmpl.clauses.map(c => `
-      <label class="clause-item ${selectedClauses.includes(c.id) ? 'checked' : ''}" data-clause="${c.id}">
-        <input type="checkbox" ${selectedClauses.includes(c.id) ? 'checked' : ''} />
-        <div class="clause-info">
-          <div class="clause-name">${c.name}</div>
-          <div class="clause-preview">${c.preview}</div>
-        </div>
-      </label>
-    `).join('');
+  const clauseSec = document.getElementById('clauseSection');
+  const clauseList = document.getElementById('clauseList');
+  if (clauseSec && clauseList) {
+    if (tmpl.clauses.length > 0) {
+      clauseSec.style.display = 'block';
+      selectedClauses = tmpl.clauses.filter(c => c.checked).map(c => c.id);
+      clauseList.innerHTML = tmpl.clauses.map(c => `
+        <label class="clause-item ${selectedClauses.includes(c.id) ? 'checked' : ''}" data-clause="${c.id}">
+          <input type="checkbox" ${selectedClauses.includes(c.id) ? 'checked' : ''} />
+          <div class="clause-info">
+            <div class="clause-name">${c.name}</div>
+            <div class="clause-preview">${c.preview}</div>
+          </div>
+        </label>
+      `).join('');
 
-    clauseList.querySelectorAll('.clause-item').forEach(item => {
-      const cb = item.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      const id = (item as HTMLElement).dataset.clause!;
-      cb.addEventListener('change', () => {
-        if (cb.checked) {
-          selectedClauses.push(id);
-          item.classList.add('checked');
-        } else {
-          selectedClauses = selectedClauses.filter(c => c !== id);
-          item.classList.remove('checked');
-        }
+      clauseList.querySelectorAll('.clause-item').forEach(item => {
+        const cb = item.querySelector('input[type="checkbox"]') as HTMLInputElement;
+        const id = (item as HTMLElement).dataset.clause!;
+        cb.addEventListener('change', () => {
+          if (cb.checked) {
+            selectedClauses.push(id);
+            item.classList.add('checked');
+          } else {
+            selectedClauses = selectedClauses.filter(c => c !== id);
+            item.classList.remove('checked');
+          }
+        });
       });
-    });
-  } else {
-    clauseSec.style.display = 'none';
-    selectedClauses = [];
+    } else {
+      clauseSec.style.display = 'none';
+      selectedClauses = [];
+    }
   }
 
   // Bind item events
@@ -189,8 +228,9 @@ const renderItemRow = (it: any, i: number, isHandover = false) => {
 };
 
 const bindItemEvents = (isHandover = false) => {
-  const body = document.getElementById('itemsBody')!;
-  const addBtn = document.getElementById('addRowBtn')!;
+  const body = document.getElementById('itemsBody');
+  const addBtn = document.getElementById('addRowBtn');
+  if (!body || !addBtn) return;
 
   body.addEventListener('input', (e) => {
     const el = e.target as HTMLInputElement;
@@ -224,7 +264,7 @@ const refreshItemsTable = (isHandover = false) => {
   body.innerHTML = items.map((it, i) => renderItemRow(it, i, isHandover)).join('');
 };
 
-// Collect form data
+// ===== Collect form data =====
 const collectFormData = (): Record<string, any> => {
   const data: Record<string, any> = {};
   if (!currentTemplate) return data;
@@ -237,7 +277,7 @@ const collectFormData = (): Record<string, any> => {
   return data;
 };
 
-// Validate
+// ===== Validate =====
 const validate = (): boolean => {
   if (!currentTemplate) return false;
   for (const f of currentTemplate.fields) {
@@ -246,6 +286,7 @@ const validate = (): boolean => {
       if (!el || !el.value.trim()) {
         showToast(`Vui lòng nhập: ${f.label}`, 'error');
         el?.focus();
+        el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
         return false;
       }
     }
@@ -253,28 +294,22 @@ const validate = (): boolean => {
   return true;
 };
 
-// Preview
+// ===== Preview =====
 const renderPreview = () => {
   if (!currentTemplate) return;
   const data = collectFormData();
   const html = currentTemplate.render(data, selectedClauses, currentTemplate.hasItems ? items : undefined);
-  document.getElementById('previewContent')!.innerHTML = html;
+  const previewEl = document.getElementById('previewContent');
+  if (previewEl) previewEl.innerHTML = html;
 };
 
-document.getElementById('previewBtn')?.addEventListener('click', () => {
-  if (!validate()) return;
-  renderPreview();
-  showStep(3);
-});
-
-// PDF Export
+// ===== PDF Export =====
 const exportPDF = async () => {
   if (!validate()) return;
   renderPreview();
 
   showToast('Đang tạo PDF...', 'info');
 
-  // Make sure preview is visible for capture
   const step3 = document.getElementById('step3')!;
   const wasActive = step3.classList.contains('active');
   if (!wasActive) step3.classList.add('active');
@@ -311,7 +346,7 @@ const exportPDF = async () => {
 
     const fileName = `${currentTemplate!.title.replace(/\s+/g, '_')}_${new Date().toISOString().slice(0, 10)}.pdf`;
     pdf.save(fileName);
-    showToast('✅ Xuất PDF thành công!', 'success');
+    showToast('Xuất PDF thành công!', 'success');
   } catch (err) {
     console.error(err);
     showToast('Lỗi khi tạo PDF', 'error');
@@ -320,17 +355,75 @@ const exportPDF = async () => {
   if (!wasActive) step3.classList.remove('active');
 };
 
-document.getElementById('exportPdfBtn')?.addEventListener('click', exportPDF);
-document.getElementById('exportPdfBtn2')?.addEventListener('click', exportPDF);
-
-// Toast
+// ===== Toast =====
 const showToast = (msg: string, type: 'info' | 'success' | 'error' = 'info') => {
-  const t = document.getElementById('toast')!;
-  t.textContent = msg;
+  const t = document.getElementById('toast');
+  if (!t) return;
+
+  const icon = t.querySelector('.toast-icon') as HTMLElement;
+  const msgEl = t.querySelector('.toast-msg') as HTMLElement;
+
+  const icons: Record<string, string> = {
+    info: 'ℹ️',
+    success: '✅',
+    error: '❌'
+  };
+
+  if (icon) icon.textContent = icons[type] || 'ℹ️';
+  if (msgEl) msgEl.textContent = msg;
+
   t.className = `toast show ${type}`;
-  setTimeout(() => t.classList.remove('show'), 3000);
+  setTimeout(() => t.classList.remove('show'), 3500);
 };
 
-// Init
-initTheme();
-renderCards();
+// ===== Initialize App =====
+const initApp = () => {
+  // Theme
+  initTheme();
+
+  // Theme toggle
+  document.getElementById('themeToggle')?.addEventListener('click', () => {
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('vietdoc-theme', next);
+    updateThemeIcon(next);
+  });
+
+  // Navigation
+  document.getElementById('backToStep1')?.addEventListener('click', () => showStep(1));
+  document.getElementById('backToStep2')?.addEventListener('click', () => showStep(2));
+  document.getElementById('editBtn')?.addEventListener('click', () => showStep(2));
+
+  // Preview
+  document.getElementById('previewBtn')?.addEventListener('click', () => {
+    if (!validate()) return;
+    renderPreview();
+    showStep(3);
+  });
+
+  // PDF Export
+  document.getElementById('exportPdfBtn')?.addEventListener('click', exportPDF);
+  document.getElementById('exportPdfBtn2')?.addEventListener('click', exportPDF);
+
+  // Search
+  const searchInput = document.getElementById('searchInput') as HTMLInputElement;
+  let searchTimeout: ReturnType<typeof setTimeout>;
+  searchInput?.addEventListener('input', () => {
+    clearTimeout(searchTimeout);
+    searchTimeout = setTimeout(() => {
+      renderCards(searchInput.value);
+    }, 200);
+  });
+
+  // Render cards & stepper
+  renderCards();
+  updateStepper(1);
+};
+
+// Wait for DOM to be fully ready
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  initApp();
+}
