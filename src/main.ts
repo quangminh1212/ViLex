@@ -113,8 +113,20 @@ const renderCards = (filter = '') => {
   if (countEl) countEl.textContent = String(filtered.length);
 
   grid.querySelectorAll('.doc-card').forEach(card => {
-    card.addEventListener('click', () => {
-      const id = (card as HTMLElement).dataset.id!;
+    const el = card as HTMLElement;
+    const color = el.dataset.color || '#4f46e5';
+
+    // Glow effect on hover
+    el.addEventListener('mouseenter', () => {
+      el.style.boxShadow = `0 8px 32px ${color}30, 0 0 60px ${color}15`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.style.boxShadow = '';
+    });
+
+    // Click to select
+    el.addEventListener('click', () => {
+      const id = el.dataset.id!;
       currentTemplate = templates.find(t => t.id === id) || null;
       if (currentTemplate) openForm(currentTemplate);
     });
